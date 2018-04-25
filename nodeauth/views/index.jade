@@ -1,5 +1,14 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+ h2.smth
+ p Please enter coffee order below
+ 
+ if errors
+  each error, i in errors
+   div.alert.alert-danger #{error.msg}
+ form(method='get', action='/coffee_test')
+  .form-group
+   label Username
+   input.form-control(name='lenght', type='text', placeholder='Enter lenght')
+   input.btn.btn-primary(type='submit', name='submit',value = 'Submit')

@@ -5,11 +5,12 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session');
 var passport = require('passport');
-var expressValidator = require('express-validator');
 var LocalStrategy = require('passport-local').Strategy;
+var expressValidator = require('express-validator');
 var multer = require('multer');
 var upload = multer({dest: './uploads'});
 var flash = require('connect-flash');
+var bcrypt = require('bcryptjs');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
 var db = mongoose.connection;
@@ -17,6 +18,7 @@ var db = mongoose.connection;
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+// var coffee_testRouter = require('./routes/coffee_test');
 
 var app = express();
 
@@ -64,9 +66,15 @@ app.use(function(req, res, next) {
 	res.locals.messages = require('express-messages')(req, res);
 	next();
 });
+//global variable
+app.get('*', function(req, res, next){
+  res.locals.user = req.user || null;
+  next();
+});
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+// app.use('/coffee_test',coffee_testRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -83,5 +91,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
 
 module.exports = app;
